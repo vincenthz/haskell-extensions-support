@@ -20,4 +20,5 @@ install:
  - echo "$(ghc --version)"
 
 script:
+ - ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No"
  - ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No" > ghc-${GHCVER}.txt
