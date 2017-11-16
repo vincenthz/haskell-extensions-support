@@ -1,24 +1,52 @@
 sudo: false
-
 matrix:
   include:
-    - env: CABALVER=1.18 GHCVER=7.8.4
-      addons: {apt: {packages: [ghc-7.8.4], sources: [hvr-ghc]}}
-    - env: CABALVER=1.22 GHCVER=7.10.3
-      addons: {apt: {packages: [ghc-7.10.3],sources: [hvr-ghc]}}
-    - env: CABALVER=1.24 GHCVER=8.0.2
-      addons: {apt: {packages: [ghc-8.0.2],sources: [hvr-ghc]}}
-    - env: CABALVER=2.0 GHCVER=8.2.1
-      addons: {apt: {packages: [ghc-8.2.1],sources: [hvr-ghc]}}
-    - env: CABALVER=head GHCVER=head
-      addons: {apt: {packages: [ghc-head],  sources: [hvr-ghc]}}
-
+  - env: CABALVER=1.18 GHCVER=7.8.4
+    addons:
+      apt:
+        packages:
+        - ghc-7.8.4
+        sources:
+        - hvr-ghc
+  - env: CABALVER=1.22 GHCVER=7.10.3
+    addons:
+      apt:
+        packages:
+        - ghc-7.10.3
+        sources:
+        - hvr-ghc
+  - env: CABALVER=1.24 GHCVER=8.0.2
+    addons:
+      apt:
+        packages:
+        - ghc-8.0.2
+        sources:
+        - hvr-ghc
+  - env: CABALVER=2.0 GHCVER=8.2.1
+    addons:
+      apt:
+        packages:
+        - ghc-8.2.1
+        sources:
+        - hvr-ghc
+  - env: CABALVER=head GHCVER=head
+    addons:
+      apt:
+        packages:
+        - ghc-head
+        sources:
+        - hvr-ghc
 before_install:
- - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
-
+- export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
 install:
- - echo "$(ghc --version)"
-
+- echo "$(ghc --version)"
 script:
- - ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No"
- - ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No" > ghc-${GHCVER}.txt
+- ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No"
+- ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No" > ghc-${GHCVER}.txt
+deploy:
+  provider: releases
+  api_key:
+    secure: LQodB/3la60+pjm6fU00Us1EL+icFGG4P5rF/L7ZWzsFvnPNid2feO58kPnaDIHRtZaZnOnEVm61TJ4JONEIdgQ5zBsdhx34pstvuni8KieRr3pAMUIfaP+2Jh9TDYfzNGvFPnT0bN3K3RkCiR/e4r3p7m5DX/l9Ks3IpfH5DGsmDF0s6QkOA7PoX7ZDGRuSnrNu2Skp9pfEvH5e+zHASHsrJOJUbEEQTWwl5XN/xYy+KrLPo9h5bTOujmv+rl1jA7aMNBcrVusABxSAERQkh4Z+7SeV3CVwSt/wNlEsps+gMxjrf3FqoLi9V1bku8GheGrnKHUQWUpDa9fSFnLQv0GY0sWWXrvGHUuC+c2/33qVFBaEtqkOaGAeFEApKzXIkChlqo82g7500D+qm8IC5IszgF87NXZ3ZqTvXcxLdIVZ4Xu21PVVU1SJ4RKQecn+UsbMcop3IEskEzEVZ34soBRdlj0cJ+KRxdGyckk0o2bD6GxnagP95SNNvEo3dXywBy9n2caH3DDYrq8T3q8d8SWol3bRkyYEWT9VvcJWgjQpQTSc8vrQL+4eKbo8t1SuURLgESXl7XwW/e9jI8GSgsCSn4JMVr3SYL22CzDxtE8aLfS5ROZO+yWmCBmqzOIHGwKN0rbnBNSwzQLpsTWi90uOeC2pnpq6Pm0Eo8EOCpc=
+  file: ghc-${GHCVER}.txt
+  on:
+    repo: vincenthz/haskell-extensions-support
