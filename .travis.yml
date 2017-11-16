@@ -55,6 +55,7 @@ before_install:
 install:
 - echo "$(ghc --version)"
 script:
+- ghc --help
 - ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No"
 - mkdir build && ghc --show-options | grep '^-X' | sed 's/-X//' | grep -v "^No" > build/ghc-${GHCVER}.txt
 deploy:
